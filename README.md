@@ -31,25 +31,14 @@ Test APIs using the workspace:-
 
 
 ## Implementation Approach and Assumptions 
+![Data Model](https://github.com/neeraj-dev-007/turinix-backend-engineer-assessment/assets/161232671/4dfbbdf5-bb41-4274-81a0-2f967bd099f7)
 
 ### CRUD operation APIs:
 
-- Utilize the Stripe Java SDK to integrate Stripe payment processing service into the Spring Boot Application.
-- StripePaymentProvider class to make Stripe API calls for customer creation and updates upon user signup.
-- Change Account model to store additional fields like providerId and providerType returned by Stripe.
 
 ### Scheduling and Availability APIs:
 
-- Leverage the Temporal Workflow Engine to orchestrate business logic efficiently.
-- Define 2 temporal workflows:
-  - Create Account Workflow: This workflow will handle account creation and consists of following 2 activities
-    - Create Payment Account Activity: To create account with Stripe.
-    - Save Account to DB Activity: To save account with updated fields like providerType and providerId to PostgreSQL DB.
-  - Update Account Workflow: This workflow will handle account updation and consists of following 2 activities
-    - Update Payment Account Activity: To update account with Stripe.
-    - Update Account to DB Activity: To update account in PostgreSQL DB.
-- Create Account Workers listening to _create-account-workflow_ and _update-account-workflow_ task queues to handle tasks such as customer creation and updates seamlessly.
-- Implement retry and error handling mechanisms within temporal workflows to ensure fault tolerance and reliability.
+
 
 
 ## References
