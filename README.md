@@ -1,73 +1,61 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Introduction
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Welcome to the Turinix Backend Engineer Assessment repository! This project is part of the assessment process for backend engineers at Turinix.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This repository contains a Nest.js based backend application developed with Typescript and Node.js and leveraging PostgreSQL instance hosted on cloud by ElephantSQL. The task involved creating API endpoints for CRUD Operations on Departments, Roles, Employees, Shifts and API endpoints for assigning shift to employees, fetching their schedule and filling their availability,
 
-## Description
+[Postman Workspace for API Testing](https://www.postman.com/solar-water-291838-1/workspace/turinix-backend-engineer-assessment)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
+## Setup Instructions 
 
-```bash
-$ npm install
+To run the application you would require:
+
+- Node.js
+- Postman (or any other tool for API testing)
+
+You are required to first install the project dependencies
+
+```sh
+npm install
 ```
 
-## Running the app
+and then run the application using the following command or using your IDE.
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```sh
+npm run start
 ```
 
-## Test
+Test APIs using the workspace:-
+[Postman Workspace for API Testing](https://www.postman.com/solar-water-291838-1/workspace/turinix-backend-engineer-assessment)
 
-```bash
-# unit tests
-$ npm run test
 
-# e2e tests
-$ npm run test:e2e
+## Implementation Approach and Assumptions 
 
-# test coverage
-$ npm run test:cov
-```
+### CRUD operation APIs:
 
-## Support
+- Utilize the Stripe Java SDK to integrate Stripe payment processing service into the Spring Boot Application.
+- StripePaymentProvider class to make Stripe API calls for customer creation and updates upon user signup.
+- Change Account model to store additional fields like providerId and providerType returned by Stripe.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Scheduling and Availability APIs:
 
-## Stay in touch
+- Leverage the Temporal Workflow Engine to orchestrate business logic efficiently.
+- Define 2 temporal workflows:
+  - Create Account Workflow: This workflow will handle account creation and consists of following 2 activities
+    - Create Payment Account Activity: To create account with Stripe.
+    - Save Account to DB Activity: To save account with updated fields like providerType and providerId to PostgreSQL DB.
+  - Update Account Workflow: This workflow will handle account updation and consists of following 2 activities
+    - Update Payment Account Activity: To update account with Stripe.
+    - Update Account to DB Activity: To update account in PostgreSQL DB.
+- Create Account Workers listening to _create-account-workflow_ and _update-account-workflow_ task queues to handle tasks such as customer creation and updates seamlessly.
+- Implement retry and error handling mechanisms within temporal workflows to ensure fault tolerance and reliability.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
+## References
 
-Nest is [MIT licensed](LICENSE).
+- [Nest.js documentation](https://docs.nestjs.com/)
+- [TypeScript documentation](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
+- [Amazing Nest.js Course by Haider Malik](https://youtu.be/sFnAHC9lLaw?si=Sg_3wzvXZtdQkBa_)
+- [ElephantSQL for hosting PostgreSQL instances on cloud](https://www.elephantsql.com/)
+- Various articles on Medium and threads on Stack Overflow.
