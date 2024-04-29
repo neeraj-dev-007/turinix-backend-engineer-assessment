@@ -31,7 +31,18 @@ Test APIs using the workspace:-
 
 
 ## Implementation Approach and Assumptions 
+
+### Data Model:
+
 ![Data Model](https://github.com/neeraj-dev-007/turinix-backend-engineer-assessment/assets/161232671/4dfbbdf5-bb41-4274-81a0-2f967bd099f7)
+(Yes, those arrows in diagram will be fixed soon)
+
+Design Thinking for Present and Future:  
+- Add _departments_ and _roles_ table for enriching _employees_ and _shifts_ table. this two table will ensure that only employee meeting skill requirements is allocated a shift.
+- Create _shifts_departments_ and _shift_roles_ for acting as bridge tables for _shifts_ with _departments_ and _roles_ respectively.
+- Add _dates_ table for providing all information related to a date and will help immensely when scaling the application, creating reports data and intergrating with third party systems. It contains columns like **isHoliday**, **isWeekend**, **isBusy** which will help us in predicting a surge in customers and hence alert user to increase shifts for those days.
+- Add _availabilities_ table for storing availability information of an employee on a particular date.
+- Add _schedules_ table for storing schedule of all emplpoyees and their shift details on a particular date.
 
 ### CRUD operation APIs:
 
