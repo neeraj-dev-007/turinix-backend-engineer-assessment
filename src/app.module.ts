@@ -9,7 +9,6 @@ import { LoggerMiddleware } from './utils/middlewares/logger/logger.middleware';
 import { DEPARTMENTS } from './utils/constants/api-endpoints';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { Department } from './components/departments/department.entity';
 
 @Module({
   imports: [
@@ -24,7 +23,7 @@ import { Department } from './components/departments/department.entity';
       password: 'dpslUnGbuNoVX-emvHKKDtIJO5zR7Csr',
       database: 'jojzmzjv',
       synchronize: true,
-      entities: [Department],
+      autoLoadEntities: true,
     }),
   ],
   controllers: [AppController],

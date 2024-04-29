@@ -3,44 +3,78 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
+  ParseIntPipe,
   Post,
   Put,
 } from '@nestjs/common';
-import { DEPARTMENTS, DEPARTMENT_ID } from 'src/utils/constants/api-endpoints';
+import {
+  DEPARTMENTS,
+  DEPARTMENT_ID,
+  DEPARTMENT_ID_ENDPOINT,
+} from 'src/utils/constants/api-endpoints';
 import { DepartmentsService } from './departments.service';
 import { CreateDepartmentDto } from './dtos/create-department.dto';
 import { UpdateDepartmentDto } from './dtos/update-department.dto';
+import { Department } from './department.entity';
 
 @Controller(DEPARTMENTS)
 export class DepartmentsController {
   constructor(private departmentsService: DepartmentsService) {}
 
   @Post()
-  createDepartment(@Body() createDepartmentDto: CreateDepartmentDto) {
-    this.departmentsService.createDepartment(createDepartmentDto);
+  async createDepartment(
+    @Body() createDepartmentDto: CreateDepartmentDto,
+  ): Promise<Department> {
+    return this.departmentsService.createDepartment(createDepartmentDto);
   }
 
   @Get()
-  getAllDepartments() {
-    this.departmentsService.getAllDepartments();
+  async getAllDepartments(): Promise<Department[]> {
+    return this.departmentsService.getAllDepartments();
   }
 
-  @Get(DEPARTMENT_ID)
-  getDepartmentById(@Param(DEPARTMENT_ID) departmentId: number) {
-    this.departmentsService.getDepartmentById(departmentId);
+  @Get(DEPARTMENT_ID_ENDPOINT)
+  async getDepartmentById(
+    @Param(DEPARTMENT_ID, ParseIntPipe) departmentId: number,
+  ) {
+    try {
+      return this.departmentsService.getDepartmentById(departmentId);
+    } catch (err) {
+      if (err instanceof NotFoundException) {
+        throw err;
+      }
+    }
   }
 
-  @Put(DEPARTMENT_ID)
-  updateDepartment(
-    @Param(DEPARTMENT_ID) departmentId: number,
+  @Put(DEPARTMENT_ID_ENDPOINT)
+  async updateDepartment(
+    @Param(DEPARTMENT_ID, ParseIntPipe) departmentId: number,
     @Body() updateDepartmentDto: UpdateDepartmentDto,
   ) {
-    this.departmentsService.updateDepartment(departmentId, updateDepartmentDto);
+    try {
+      return this.departmentsService.updateDepartment(
+        departmentId,
+        updateDepartmentDto,
+      );
+    } catch (err) {
+      if (err instanceof NotFoundException) {
+        throw err;
+      }
+    }
   }
 
-  @Delete(DEPARTMENT_ID)
-  deleteDepartment(@Param(DEPARTMENT_ID) departmentId: number) {
-    this.departmentsService.deleteDepartment(departmentId);
+  @Delete(DEPARTMENT_ID_ENDPOINT)
+  async deleteDepartment(
+    @Param(DEPARTMENT_ID, ParseIntPipe) departmentId: number,
+  ) {
+    try {
+      return this.departmentsService.deleteDepartment(departmentId);
+    } catch (err) {
+      if (err instanceof NotFoundException) {
+        throw err;
+      }
+    }
   }
 }
